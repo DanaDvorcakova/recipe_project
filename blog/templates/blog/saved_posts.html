@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="mb-4">My Saved Recipes</h2>
+
+    {% if posts %}
+    <ul class="list-group" id="saved-list-container">
+        {% for post in posts %}
+        <li
+            class="list-group-item d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between saved-item">
+
+            <!-- Left: image + title + stats -->
+            <div class="d-flex align-items-start align-items-md-center flex-grow-1">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="saved-img">
+                {% endif %}
+                <div class="ms-3">
+                    <a href="{% url 'post-detail' post.id %}"
+                        class="fw-bold text-decoration-none text-dark saved-title">
+                        {{ post.title }}
+                    </a>
+                    <div class="text-muted small mt-1 mt-md-0">
+                        ❤️ {{ post.likes.count }} &nbsp; 🔖 {{ post.total_saves }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: view button -->
+            <a href="{% url 'post-detail' post.id %}"
+                class="btn btn-sm btn-outline-primary mt-2 mt-md-0 view-btn">View</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        You haven't saved any recipes yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

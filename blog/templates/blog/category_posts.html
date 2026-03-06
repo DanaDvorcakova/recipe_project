@@ -1,0 +1,63 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="mb-4 rounded-3 shadow-sm" style="background: linear-gradient(to right, #f8f9fa, #e9ecef);">
+  <div class="container py-3 text-center">
+    <h2 class="fw-bold mb-2">{{ category_name }} Recipes</h2>
+    <p class="text-muted fst-italic mb-3">
+      Discover tasty dishes and creative ideas in the "{{ category_name }}" category.
+    </p>
+    <a href="{% url 'blog-home' %}" class="btn btn-primary btn-sm text-white">
+      ← Back to All Recipes
+    </a>
+  </div>
+</div>
+
+<!-- Recipe Cards -->
+<div class="row">
+  {% for post in posts %}
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100 shadow-sm border-0 hover-shadow">
+
+        <!-- Image with default fallback -->
+        <a href="{% url 'post-detail' post.pk %}">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Image of {{ post.title }}">
+            {% else %}
+                <img src="{% static 'blog/images/default.jpg' %}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Default recipe image">
+            {% endif %}
+        </a>
+
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'post-detail' post.pk %}" class="text-decoration-none text-dark">
+              {{ post.title }}
+            </a>
+          </h5>
+
+          <p class="card-text text-muted">{{ post.description|truncatewords:18 }}</p>
+
+          <!-- Metadata badges -->
+          <div class="d-flex flex-wrap gap-2 mt-2">           
+            <span class="badge bg-info text-dark">{{ post.cooking_time }} mins</span>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+          <small class="text-muted">
+            By <a href="{% url 'user-posts' post.author.username %}" class="text-decoration-none">{{ post.author }}</a>
+          </small>
+          <small class="text-muted">{{ post.date_posted|date:"M d, Y" }}</small>
+        </div>
+
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-center text-muted">No recipes found in this category yet.</p>
+  {% endfor %}
+</div>
+
+{% endblock content %}

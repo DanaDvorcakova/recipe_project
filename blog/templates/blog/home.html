@@ -1,0 +1,108 @@
+{% extends "blog/base.html" %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Section -->
+<div class="p-5 mb-5 rounded-3 shadow-sm text-center hero-section">
+  <div class="overlay"></div>
+
+  <div class="container position-relative py-5">
+    <h1 class="display-5 fw-bold">Welcome to Tasty Recipe</h1>
+    <p class="fs-5 mb-4">Discover, cook, and share your favorite recipes with the world!</p>
+
+    {% if user.is_authenticated %}
+    <a class="btn btn-primary btn-lg me-3" href="{% url 'post-create' %}">
+      Share Your Recipe
+    </a>
+    {% else %}
+    <a class="btn btn-success btn-lg me-3" href="{% url 'register' %}">
+      Join Our Community
+    </a>
+    {% endif %}
+
+    <!-- Optional: scroll cue -->
+    <div class="scroll-down mt-4">
+      <i class="fas fa-chevron-down fa-2x"></i>
+    </div>
+  </div>
+</div>
+
+<!-- Recipe Cards -->
+<div class="row mt-4">
+  {% for post in posts %}
+  <div class="col-md-6 mb-4">
+    <div class="card h-100 shadow-sm border-0 hover-shadow">
+      {% if post.image %}
+
+      <div class="position-relative overflow-hidden">
+        <a href="{% url 'post-detail' post.id %}">
+          <img src="{{ post.image.url }}" class="card-img-top recipe-img" alt="Image of {{ post.title }}">
+        </a>
+        <div class="image-overlay"></div>
+      </div>
+
+      {% endif %}
+
+      <div class="card-body">
+        <h5 class="card-title">
+          <!-- Clicking title redirects to the recipe detail page -->
+          <a href="{% url 'post-detail' post.id %}" class="text-decoration-none text-dark fw-bold">
+            {{ post.title }}
+          </a>
+        </h5>
+        <p class="text-muted mb-1">{{ post.content|truncatewords:15 }}</p>
+        <p class="small text-secondary">⏱ {{ post.cooking_time }} mins</p>
+
+
+        <!-- Category Badge as a clickable link to category posts -->
+        <a href="{% url 'category-posts' post.category %}"
+          class="badge bg-{{ post.category|lower }} text-decoration-none mt-2">{{ post.category }} </a>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-outline-info btn-sm open-recipe-btn" data-post-id="{{ post.id }}">
+            View Recipe Preview
+          </button>
+
+        </div>
+      </div>
+
+
+      <!-- Card Footer: Author, Date, Likes -->
+      <div class="card-footer bg-white text-muted small d-flex justify-content-between align-items-center">
+        <div>
+               By <a href="{% url 'user-posts' post.author.username %}" class="text-decoration-none">{{ post.author.username }}</a>
+                    • {{ post.date_posted|date:"M d, Y" }}
+                </div>
+
+          <!-- Display Likes -->
+          <div class="d-flex align-items-center">
+            <span class="heart">❤️</span>
+            <span id="like-count-{{ post.id }}">{{ post.total_likes }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted fs-4">No recipes available yet.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Recipe Detail Modal -->
+  <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="recipeModalLabel">Recipe Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-content">
+          <!-- Recipe content will be dynamically injected here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock content %}

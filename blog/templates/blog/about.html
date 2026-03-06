@@ -1,0 +1,93 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Welcome Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <img src="{% static 'blog/images/background.jpg' %}" alt="Kitchen" class="img-fluid rounded shadow-sm">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="display-4 fw-bold">Welcome to My Recipe Blog</h2>
+                    <p class="lead text-muted">
+                        Explore a variety of recipes across categories, read featured posts, and get inspired to cook amazing dishes at home. Whether you’re a beginner or a seasoned chef, there’s something for everyone!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Featured Recipes -->
+            <h2 class="mt-5 mb-4 text-center fw-bold">Featured Recipes</h2>
+            <div class="row">
+                {% for post in featured_posts %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm card-hover position-relative">
+                        <!-- Ribbon -->
+                        {% if post.is_featured %}
+                        <div class="ribbon">Top Recipe</div>
+                        {% elif post.date_posted|date:"U" >= now|date:"U"|add:"-604800" %}
+                        <div class="ribbon">New</div>
+                        {% endif %}
+
+                        {% if post.image %}
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" style="height:200px; object-fit:cover;">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text text-muted">{{ post.description|truncatewords:20 }}</p>
+                            <a href="{% url 'post-detail' post.pk %}" class="mt-auto btn btn-primary">View Recipe</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">No featured recipes yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Author Section -->
+    <section class="py-5" style="background-color:#fff3e0;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <img src="{% static 'blog/images/image1.jpg' %}" alt="Author" class="rounded-circle shadow" style="width:180px; height:180px; object-fit:cover;">
+                </div>
+                <div class="col-md-8">
+                    <h2 class="fw-bold">About the Author</h2>
+                    <p class="text-muted">
+                        Hi! I’m Dana, a passionate home cook and food lover. I started this blog to share my favorite recipes, cooking tips, and culinary adventures. From comfort food to gourmet dishes, I aim to make cooking fun and accessible for everyone!
+                    </p>
+                    <!-- Social Icons -->
+                    <div class="mt-3">
+                        <a href="https://instagram.com/" target="_blank" class="text-dark me-3 fs-4">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="https://pinterest.com/" target="_blank" class="text-dark me-3 fs-4">
+                            <i class="bi bi-pinterest"></i>
+                        </a>
+                        <a href="https://twitter.com/" target="_blank" class="text-dark fs-4">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="bg-light py-5">
+        <div class="container text-center">
+            <h2 class="fw-bold">Get in Touch</h2>
+            <p class="text-muted">Have questions, suggestions, or just want to say hi? Reach out via email or through the contact form below!</p>
+            <a href="mailto:youremail@example.com" class="btn btn-primary btn-lg mt-3">Contact Me</a>
+        </div>
+    </section>
+
+</div>
+
+
+{% endblock content %}

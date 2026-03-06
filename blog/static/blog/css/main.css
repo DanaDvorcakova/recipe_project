@@ -1,0 +1,416 @@
+/* ===================== GLOBAL STYLES ===================== */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #fafafa;
+    color: #333333;
+    margin-top: 5rem;
+}
+
+h1 { color: white; }
+h2, h3, h4, h5, h6 { color: black; }
+
+ul { margin: 0; }
+
+a { 
+    text-decoration: none;
+}
+
+a:hover { 
+    text-decoration: none; 
+}
+
+.bg-steel { 
+    background-color: #5f788a; 
+}
+
+.site-header .navbar-nav .nav-link {
+    color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover { 
+    color: #ffffff; 
+}
+
+.site-header .navbar-nav .nav-link.active { 
+    font-weight: 500; 
+}
+
+
+/* ===================== HERO SECTION ===================== */
+.hero-section {
+    position: relative;
+    background-image: url('../images/background.jpg');
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 2rem; 
+}
+
+.hero-section .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+    border-radius: 0.5rem;
+    z-index: 0;
+}
+
+.hero-section .container { 
+    position: relative; z-index: 1; 
+}
+
+.hero-section h1 { 
+    font-weight: 700;
+    font-size: 2.5rem; 
+}
+
+.hero-section p { 
+    font-size: 1.1rem; 
+}
+
+.hero-section .btn-primary {
+    background-color: #ff6b35;
+    border-color: #ff6b35;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.hero-section .btn-primary:hover {
+    background-color: #e85a2a;
+    border-color: #e85a2a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+
+/* ===================== HERO SCROLL ARROW ===================== */
+.scroll-down {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.scroll-down i.fa-chevron-down {
+    color: #ffffff;
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+/* Bounce animation */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+
+/* ===================== CARDS / POSTS ===================== */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+.card-hover img {
+    transition: transform 0.3s ease;
+}
+
+.card-hover:hover img {
+    transform: scale(1.05);
+}
+
+.card-hover .btn-primary {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.card-hover .btn-primary:hover {
+    transform: translateY(-3px);
+    background-color: #0056b3;
+}
+
+/* Recipe Card hover */
+.card:hover .card-footer {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card-footer .heart {
+    color: #dc3545;
+    font-size: 1.1rem;
+    margin-right: 4px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Ribbon */
+.ribbon {
+    width: 120px;
+    height: 30px;
+    background: #ff6f61;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    left: -10px;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 10;
+    font-size: 0.8rem;
+}
+
+
+/* ===================== IMAGES ===================== */
+.recipe-img, .sidebar-recipe-img, .account-img {
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.recipe-img {
+    height: 300px;
+    width: 100%;
+}
+
+.recipe-img-full {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.saved-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    margin-right: 12px;
+}
+
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+/* Hover effects for images */
+.card:hover .recipe-img {
+    transform: scale(1.05);
+}
+
+/* ===================== SIDEBAR / CATEGORIES ===================== */
+.sidebar-sticky { 
+    position: sticky; 
+    top: 100px; 
+}
+
+.list-group-item {
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list-group-item:hover { 
+    background-color: #f8f9fa; 
+    cursor: pointer; 
+}
+
+.list-group-item.selected { 
+    color: black; 
+    font-weight: bold; 
+}
+
+.list-group-item a { 
+    color: #0d6efd; 
+}
+
+.list-group-item.selected a { 
+    color: black; 
+}
+
+/* Category background colors (optional for badges or sections) */
+.bg-dessert { background-color: #f28ab2; }
+.bg-main { background-color: #6c63ff; }
+.bg-appetizer { background-color: #23f3db; }
+.bg-soup { background-color: #f3c623; }
+
+/* Sidebar Top Recipe Images */
+.sidebar-recipe-img {
+    width: 250px;          /* fixed width */
+    height: 200px;         /* fixed height */
+    object-fit: cover;    /* crop to fit the box without distortion */
+    border-radius: 10px;   /* optional: rounded corners */
+    display: block;       /* ensure it respects width/height */
+    margin: 0 auto 8px;   /* center horizontally and margin-bottom */
+    transition: transform 0.3s ease; /* hover effect */
+}
+
+.sidebar-recipe-img:hover {
+    transform: scale(1.05);
+}
+
+
+/* ===================== SAVED POSTS LIST ===================== */
+li.saved-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 12px 15px;
+}
+
+li.saved-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.saved-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.saved-title {
+    font-size: 1.1rem;
+}
+
+/* View button hover effect */
+.view-btn {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    white-space: nowrap;
+}
+.view-btn:hover {
+    transform: scale(1.05);
+    background-color: #0d6efd;
+    color: white;
+}
+
+
+/* ===================== BUTTONS ===================== */
+#backToTopBtn {
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 15px;
+    font-size: 20px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#backToTopBtn:hover { 
+    background-color: #0056b3; 
+    cursor: pointer; 
+}
+
+#backToTopBtn:active { 
+    transform: scale(0.95); 
+}
+
+form .btn-outline-info:hover { 
+    background-color: #0d6efd; 
+    color: #fff; 
+}
+
+
+/* ===================== TOASTS / LIKE ===================== */
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+.animate-like { 
+    animation: pop 0.5s ease forwards; 
+}
+
+@keyframes slideInRight {
+    0% { transform: translateX(120%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+#likeToast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1055;
+    background-color: #dc3545;
+    color: white;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    animation: slideInRight 0.5s ease forwards;
+}
+
+#likeToast .btn-close { 
+    margin-left: 1rem; 
+    filter: brightness(0) invert(1); 
+}
+
+
+/* ===================== MODALS ===================== */
+.modal.fade .modal-dialog { 
+    transform: translateY(20px); 
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; 
+    opacity: 0; 
+}
+
+.modal.show .modal-dialog { 
+    transform: translateY(0); 
+    opacity: 1; 
+}
+
+.modal-content { 
+    border-radius: 12px; 
+    border: none; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25); 
+}
+
+.modal-body { 
+    animation: fadeInContent 0.4s ease-in-out; 
+}
+
+@keyframes fadeInContent { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
+}
+
+.modal-backdrop.show { 
+    backdrop-filter: blur(6px); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-header { 
+    border-bottom: none; 
+    padding-bottom: 0; 
+}
+
+.modal-title { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.6rem; 
+}
+
+#recipeModal .modal-body img {
+    width: 100%;            
+    height: auto;            
+    max-width: 500px;        
+    max-height: 400px;       
+    object-fit: contain;   
+    margin: 0 auto;         
+    display: block;         
+}

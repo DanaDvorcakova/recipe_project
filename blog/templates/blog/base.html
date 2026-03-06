@@ -1,0 +1,347 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/main.css' %}?v=3">
+
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    {% if title %}
+    <title>Recipe Blog | {{ title }}</title>
+    {% else %}
+    <title>Recipe Blog | Discover & Share Recipes</title>
+    {% endif %}
+</head>
+
+<body style="background-color:#f8f9fa;">
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
+        <div class="container">
+
+            <!-- Brand with Logo -->
+            <a class="navbar-brand fw-bold" href="{% url 'blog-home' %}">
+                <img src="{% static 'blog/images/logo.jpg' %}" alt="Logo" style="height: 40px;">
+                Tasty Recipes
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- Left Links -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'blog-home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'blog-about' %}">About</a>
+                    </li>
+                </ul>
+
+
+                <!-- Right Links -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+
+                    <!-- Saved Recipes Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-white position-relative dropdown-toggle" href="#" id="savedDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bookmark fa-lg"></i>
+                            <span id="savedCountBadge"
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {% if saved_count > 0 %}
+                                {{ saved_count }}
+                                {% else %}
+                                0
+                                {% endif %}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="savedDropdown"
+                            id="savedDropdownMenu" style="min-width: 250px; max-height: 300px; overflow-y: auto;">
+                            {% if saved_count == 0 %}
+                            <li class="text-center text-muted p-2">No saved recipes</li>
+                            {% else %}
+                            {% for recipe in user.saved_posts.all|slice:":3" %}
+                            <li class="dropdown-item d-flex align-items-center">
+                                {% if recipe.image %}
+                                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}"
+                                    style="width:40px; height:40px; object-fit:cover; margin-right:8px; border-radius:4px;">
+                                {% endif %}
+                                <a href="{% url 'post-detail' recipe.pk %}" class="text-decoration-none text-dark">{{ recipe.title }}</a>
+                                </li>
+                                {% endfor %}
+                                <!-- Divider -->
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <!-- View All link (always visible if at least 1 saved post) -->
+                            <li class="text-center">
+                                <a href="{% url 'saved-posts' %}" class="text-decoration-none fw-bold">View All</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+
+                    <!-- Other authenticated navbar links -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'post-create' %}">New Recipe</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'profile' %}">Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <form action="{% url 'logout' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link text-white"
+                                style="text-decoration:none;">Logout</button>
+                        </form>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+
+                <!-- Search Bar -->
+                <div class="position-relative" style="width:300px;">
+                    <input id="live-search" class="form-control" type="search" placeholder="Search recipes..."
+                        autocomplete="off">
+
+                    <div id="live-results" class="list-group position-absolute w-100 shadow" style="z-index:1000;">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="container" style="margin-top:100px;">
+        <div class="row">
+
+            <!-- Main Content -->
+            <div class="col-md-8">
+
+                <!-- Django Messages -->
+
+                {% if messages %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% block content %}{% endblock %}
+
+
+                <!-- Pagination (only shows if page_obj exists) -->
+                {% if page_obj %}
+                <div class="text-center mt-4">
+                    {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-secondary mb-2" href="?page=1">First</a>
+                    <a class="btn btn-outline-secondary mb-2"
+                        href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <a class="btn btn-primary mb-2" href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
+                        class="btn btn-outline-primary mb-2" href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <a class="btn btn-outline-secondary mb-2" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        <a class="btn btn-outline-secondary mb-2"
+                            href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                        {% endif %}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- ================= SIDEBAR ================= -->
+            <div class="col-md-4">
+                <div class="sidebar-sticky">
+
+                    <!-- About Section -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">About This Blog</h5>
+                            <p class="card-text text-muted">
+                                Welcome to <strong>Recipe Blog</strong>! Here, we share simple, delicious, and creative
+                                recipes for home cooks of all levels.
+                                Explore a variety of dishes, discover cooking tips, and join a community that loves food
+                                as much as you do.
+                                Whether you're a beginner or a seasoned cook, you'll find inspiration for your next
+                                meal!
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- Most Liked Recipe Section -->
+                    {% if most_liked_post %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body text-center">
+
+                            <!-- Section Title -->
+                            <h5 class="card-title mb-3">Top Recipe</h5>
+
+                            <!-- Image -->
+                            {% if most_liked_post.image %}
+                            <a href="{% url 'post-detail' most_liked_post.pk %}">
+                                <img src="{{ most_liked_post.image.url }}" class="sidebar-recipe-img mb-2"
+                                    alt="{{ most_liked_post.title }}">
+                            </a>
+                            {% endif %}
+
+                            <!-- Recipe Name Below Image -->
+                            <p class="top-recipe-title mb-1">
+                                <a href="{% url 'post-detail' most_liked_post.pk %}" class="text-decoration-none">
+                                    {{ most_liked_post.title }}
+                                </a>
+                            </p>
+
+                            <!-- Likes -->
+                            <small class="text-muted d-block">
+                                ❤️ {{ most_liked_post.likes.count }}
+                            </small>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Categories Section -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Categories</h5>
+                            <ul class="list-group list-group-flush">
+                                {% for category in categories %}
+                                {% if category.category %} {# skip empty categories just in case #}
+                                {% if request.resolver_match.kwargs.category == category.category %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'category-posts' category=category.category %}"
+                                        class="text-decoration-none text-black fw-bold">
+                                        {{ category.category }} ({{ category.count }})
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'category-posts' category=category.category %}"
+                                        class="text-decoration-none text-primary">
+                                        {{ category.category }} ({{ category.count }})
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <!-- Latest Recipes Section -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Latest Recipes</h5>
+                            {% for post in latest_posts %}
+                            <p class="mb-2">
+                                <a href="{% url 'post-detail' post.pk %}" class="text-decoration-none ">
+                                    {{ post.title }}
+                                </a>
+                                <small class="text-muted d-block">{{ post.date_posted|date:"M d, Y" }}</small>
+                            </p>
+                            {% empty %}
+                            <p class="text-muted">No recipes yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-primary text-white text-center p-4 mt-5">
+        <p class="mb-0">
+            © 2026 Recipe Blog | Made with Tasty Recipes
+        </p>
+        <div>
+            <a href="https://www.facebook.com" class="text-white me-3" target="_blank">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a href="https://www.twitter.com" class="text-white me-3" target="_blank">
+                <i class="fab fa-twitter"></i> Twitter
+            </a>
+            <a href="https://www.instagram.com" class="text-white" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+    </footer>
+
+    <button id="backToTopBtn" class="btn btn-primary"
+        style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+        Back to Top ↑
+    </button>
+
+
+    <!-- Recipe Detail Modal -->
+    <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="recipeModalLabel">Recipe Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-content">
+                    <!-- Recipe content will be dynamically injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
+    <!-- Your custom JS -->
+    <script src="{% static 'blog/js/main.js' %}"></script>
+
+</body>
+
+</html>

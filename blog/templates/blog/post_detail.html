@@ -1,0 +1,150 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<a href="{% url 'blog-home' %}" class="btn btn-primary mb-3">
+    ← Back to Home
+</a>
+
+<!-- Recipe Title & Hero Image -->
+<div class="mb-4 text-center">
+    <h2 class="display-4 fw-bold">{{ post.title }}</h2>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="img-fluid recipe-img-full mb-3" alt="{{ post.title }}">
+    {% endif %}
+</div>
+
+<!-- Recipe Metadata -->
+<div class="mb-3 text-muted text-center">
+    <span>By <a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a></span> |
+    <span>Posted: {{ post.date_posted|date:"M d, Y" }}</span> |
+    <span>Category: {{ post.category }}</span> |
+    <span>Cooking Time: {{ post.cooking_time }} mins</span> |
+    <span>Status:
+        {% if post.status == 'Draft' %}
+        <span class="badge bg-secondary">{{ post.status }}</span>
+        {% elif post.status == 'Published' %}
+        <span class="badge bg-success">{{ post.status }}</span>
+        {% elif post.status == 'Archived' %}
+        <span class="badge bg-warning text-dark">{{ post.status }}</span>
+        {% else %}
+        <span class="badge bg-light text-dark">{{ post.status }}</span>
+        {% endif %}
+    </span>
+
+    <br>
+    <span>Start Date: {{ post.start_date }}</span>
+    {% if post.end_date %}
+    | <span>End Date: {{ post.end_date }}</span>
+    {% endif %}
+    <br>
+    <span>Contributors:
+        {% for user in post.stakeholders.all %}
+        {{ user.username }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        None
+        {% endfor %}
+    </span>
+</div>
+
+<!-- Like & Save Buttons -->
+<div class="text-center mb-4">
+    <button id="like-btn" data-id="{{ post.id }}" class="btn btn-outline-danger px-4">
+        Like (<span id="like-count">{{ post.total_likes }}</span>)
+    </button>
+
+    {% if user.is_authenticated %}
+    <button id="save-btn" data-id="{{ post.id }}" data-toggle-url="{% url 'toggle-save' %}"
+        class="btn btn-outline-success px-4">
+        Save (<span id="save-count">{{ post.total_saves }}</span>)
+    </button>
+    {% endif %}
+</div>
+
+<!-- Description -->
+<div class="mb-4">
+    <h3>Description</h3>
+    <p class="text-muted">{{ post.description }}</p>
+</div>
+
+<!-- Ingredients -->
+<div class="mb-4">
+    <h3>Ingredients</h3>
+    <ul class="list-group list-group-flush">
+        {% for ingredient in post.ingredients.splitlines %}
+        <li class="list-group-item">{{ ingredient }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Instructions -->
+<div class="mb-4">
+    <h3>Instructions</h3>
+    <ol class="list-group list-group-numbered">
+        {% for step in post.instructions.splitlines %}
+        <li class="list-group-item">{{ step }}</li>
+        {% endfor %}
+    </ol>
+</div>
+
+<!-- Edit Button: Author OR Contributor -->
+{% if user == post.author or user in post.stakeholders.all %}
+<a href="{% url 'post-update' post.pk %}" class="btn btn-outline-primary me-2">Edit Recipe</a>
+{% endif %}
+
+<!-- Delete Button: ONLY Author -->
+{% if user == post.author %}
+<a href="{% url 'post-delete' post.pk %}" class="btn btn-outline-danger">Delete Recipe</a>
+{% endif %}
+
+
+<!-- ================= COMMENTS SECTION ================= -->
+<div class="mt-5">
+    <h4 class="mb-4 fw-bold">💬 Comments ({{ comments_count }})</h4>
+
+    <div id="comments-list">
+        {% for comment in comments %}
+        <div class="card mb-3 comment-box shadow-sm" data-comment-id="{{ comment.id }}">
+            <div class="card-body p-3">
+
+
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="fw-bold text-primary">{{ comment.user.username }}</div>
+                    <small class="text-muted">{{ comment.date_posted|date:"M d, Y H:i" }}</small>
+                </div>
+                <p class="mb-0 comment-content">{{ comment.content }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if comments.has_next %}
+    <div class="text-center">
+        <button id="show-more-btn" class="btn btn-outline-primary mt-2" data-next-page="{{ comments.next_page_number }}"
+            data-post-id="{{ post.id }}">
+            Show More Comments
+        </button>
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        {% if user.is_authenticated %}
+        <form method="POST" class="comment-form">
+            {% csrf_token %}
+            {{ form.content }}
+            <button type="submit" class="btn btn-primary btn-sm px-4 mt-2">Add Comment</button>
+        </form>
+        {% else %}
+        <p class="mt-3">
+            <a href="{% url 'login' %}">Login</a> to add a comment.
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Custom JS -->
+<script src="{% static 'blog/js/main.js' %}" type="text/javascript"></script>
+
+{% endblock content %}
