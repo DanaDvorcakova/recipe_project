@@ -23,6 +23,7 @@ from users import views as user_views
 from django.views.static import serve
 from django.urls import re_path
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('register/', user_views.register, name='register'),
@@ -42,10 +43,10 @@ urlpatterns = [
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-    
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
+
 
 
 #if settings.DEBUG: # The media files are only served in debug mode, as we only have an ephemeral file system on Render
