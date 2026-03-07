@@ -202,55 +202,66 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ----------------- Show More Comments -----------------
-    const showMoreBtn = document.getElementById("show-more-btn");
-    if (showMoreBtn) {
-        showMoreBtn.addEventListener("click", function () {
-            const postId = this.dataset.postId;
-            let nextPage = parseInt(this.dataset.nextPage);
+   const showMoreBtn = document.getElementById("show-more-btn");
+if (showMoreBtn) {
+    showMoreBtn.addEventListener("click", function () {
+        const postId = this.dataset.postId;
+        let nextPage = parseInt(this.dataset.nextPage);
 
-            fetch(`/post/${postId}/load-more-comments/?page=${nextPage}`)
-                .then(response => response.json())
-                .then(data => {
-                    const commentsList = document.getElementById("comments-list");
-                    if (!commentsList) return;
+        fetch(`/post/${postId}/load-more-comments/?page=${nextPage}`)
+            .then(response => response.json())
+            .then(data => {
+                const commentsList = document.getElementById("comments-list");
+                if (!commentsList) return;
 
-                    data.comments.forEach(comment => {
-                        if (!document.querySelector(`[data-comment-id="${comment.id}"]`)) {
-                            const div = document.createElement("div");
-                            div.className = "card mb-3 comment-box shadow-sm new-comment";
-                            div.setAttribute("data-comment-id", comment.id);
+                data.comments.forEach(comment => {
+                    // Avoid duplicates
+                    if (!document.querySelector(`[data-comment-id="${comment.id}"]`)) {
+                        const div = document.createElement("div");
+                        div.className = "card mb-3 shadow-sm comment-box rounded-3";
+                        div.style.backgroundColor = "#f8f9fa";
+                        div.setAttribute("data-comment-id", comment.id);
 
-                            div.innerHTML = `
-                                <div class="card-body p-3">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        // Match Django template exactly
+                        div.innerHTML = `
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <img src="${comment.profile_image_url}" 
+                                             alt="${comment.username}'s profile" 
+                                             class="rounded-circle me-2 border" 
+                                             style="width:45px; height:45px; object-fit:cover; border:1px solid #dee2e6;">
                                         <div class="fw-bold text-primary">${comment.username}</div>
-                                        <small class="text-muted">${comment.date_posted}</small>
                                     </div>
-                                    <p class="mb-0 comment-content">${comment.content}</p>
+                                    <small class="text-muted">${comment.date_posted}</small>
                                 </div>
-                            `;
+                                <p class="mb-0" style="line-height:1.5;">${comment.content}</p>
+                            </div>
+                        `;
 
-                            commentsList.appendChild(div);
+                        commentsList.appendChild(div);
 
-                            div.style.opacity = 0;
-                            div.style.transform = "translateY(-20px)";
-                            setTimeout(() => {
-                                div.style.transition = "all 0.5s ease";
-                                div.style.opacity = 1;
-                                div.style.transform = "translateY(0)";
-                            }, 50);
-                        }
-                    });
-
-                    if (data.has_next) {
-                        showMoreBtn.dataset.nextPage = data.next_page;
-                    } else {
-                        showMoreBtn.remove();
+                        // Animate new comment
+                        div.style.opacity = 0;
+                        div.style.transform = "translateY(-20px)";
+                        setTimeout(() => {
+                            div.style.transition = "all 0.5s ease";
+                            div.style.opacity = 1;
+                            div.style.transform = "translateY(0)";
+                        }, 50);
                     }
-                })
-                .catch(error => console.error("Error loading comments:", error));
-        });
-    }
+                });
+
+                // Update pagination or remove button
+                if (data.has_next) {
+                    showMoreBtn.dataset.nextPage = data.next_page;
+                } else {
+                    showMoreBtn.remove();
+                }
+            })
+            .catch(error => console.error("Error loading comments:", error));
+    });
+}
 
 
     // ----------------- Back to Top -----------------
@@ -385,12 +396,3 @@ if (alerts.length > 0) {
     }, 3000);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const autoDismiss = document.querySelectorAll('.auto-dismiss');
-    autoDismiss.forEach(function (alert) {
-        setTimeout(function () {
-            alert.classList.remove('show');
-            alert.classList.add('fade');
-        }, 5000);  // Auto-dismiss after 5 seconds
-    });
-});

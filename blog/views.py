@@ -91,14 +91,23 @@ def load_more_comments(request, pk):
     comments_list = post.comments.all().order_by('-date_posted')
     page_obj = paginate_queryset(comments_list, request, per_page=2)
 
-    comments_data = [
-        {
+    comments_data = []
+    for c in page_obj:
+        # Default profile image
+        profile_image_url = '/media/default_images/default_profile.jpg'
+
+        # Check if user has a profile with an image
+        profile = getattr(c.user, 'profile', None)
+        if profile and getattr(profile, 'image', None):
+            profile_image_url = profile.image.url
+
+        comments_data.append({
             'id': c.id,
             'username': c.user.username,
+            'profile_image_url': profile_image_url,
             'content': c.content,
             'date_posted': c.date_posted.strftime("%b %d, %Y %H:%M")
-        } for c in page_obj
-    ]
+        })
 
     return JsonResponse({
         'comments': comments_data,
