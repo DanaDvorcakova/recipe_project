@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.contrib import messages
+from django.conf import settings
+
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
