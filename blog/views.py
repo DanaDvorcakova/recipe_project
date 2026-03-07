@@ -96,13 +96,9 @@ def load_more_comments(request, pk):
         # Default profile image
         profile_image_url = '/media/default_images/default_profile.jpg'
 
-        # Use user's profile image if available
-        try:
-            if c.user.profile and c.user.profile.image:
-                profile_image_url = c.user.profile.image.url
-        except Exception:
-            # In case the user has no profile or image, keep the default
-            pass
+        # Check if profile exists and has an image
+        if hasattr(c.user, 'profile') and getattr(c.user.profile, 'image', None):
+            profile_image_url = c.user.profile.image.url
 
         comments_data.append({
             'id': c.id,
