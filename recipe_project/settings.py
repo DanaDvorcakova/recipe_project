@@ -42,9 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary',
-    'cloudinary_storage',
-    'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
@@ -130,7 +127,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -155,14 +152,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER'] # Login email address, Stored as an environment varaible
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD'] # App Password set from gmail, Stored as an environment varaible
 
-CLOUDINARY_API_KEY="881943133424434"
-CLOUDINARY_API_SECRET="NmFdkj3e0RkqtsYhIbCkbw_p6Sw"
-CLOUDINARY_CLOUD_NAME="dfc2fhyxc"
-DATABASE_URL="postgresql://recipe_project_db_2026_user:hVJak420f03mUokUW4rwen3TUElp24jD@dpg-d6lkrmdm5p6s73evd8ng-a/recipe_project_db_2026"
-DEBUG="False"
-DJANGO_SUPERUSER_EMAIL="admin@example.com"
-DJANGO_SUPERUSER_PASSWORD="683e6ce31cb812272c64426fd8f42f22"
-DJANGO_SUPERUSER_USERNAME="admin"
-EMAIL_HOST_PASSWORD="something else"
-EMAIL_HOST_USER="anything"
-SECRET_KEY="a8cef41739b25ee64a845be9d4f7d274"
