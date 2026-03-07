@@ -23,12 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+#SECRET_KEY = os.environ['SECRET_KEY']
+
+#SECRET_KEY = 'django-insecure-pyq@x&c)8jj1b55)c27xke11g%_%-79oxnd0g8hz^-9wby2sgr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == 'TRUE'
+#DEBUG = os.environ.get('DEBUG') == 'TRUE'
 
 ALLOWED_HOSTS = ['recipe-project-2-gxqs.onrender.com', '127.0.0.1', os.getenv('RENDER_EXTERNAL_HOSTNAME', '')]
+
+DEBUG = False
 
 
 # Application definition
@@ -144,12 +148,8 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'login'
 
-#MEDIA_URL = "/media/"
-#MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
