@@ -47,3 +47,6 @@ urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
+
+#if settings.DEBUG: # The media files are only served in debug mode, as we only have an ephemeral file system on Render
+#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
