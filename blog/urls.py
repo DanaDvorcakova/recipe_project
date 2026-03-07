@@ -52,7 +52,7 @@ urlpatterns = [
     path('toggle-save/', toggle_save, name='toggle-save'),
 
     # Saved posts route
-    path('saved/', saved_posts, name='saved-posts'),
+    path('saved-posts/', saved_posts, name='saved-posts'),
 
     # Route for deleting post (based on the class or function view chosen)
     path('post/<int:pk>/delete/', delete_post, name='delete-post'),
