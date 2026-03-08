@@ -7,8 +7,6 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.contrib import messages
-from django.conf import settings
-
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
@@ -63,7 +61,7 @@ class PostListView(ListView):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments_list = post.comments.all().order_by('-date_posted')
-    page_obj = paginate_queryset(comments_list, request, per_page=2)
+    page_obj = paginate_queryset(comments_list, request, per_page=3)
 
     if request.method == 'POST' and request.user.is_authenticated:
         form = CommentForm(request.POST)
@@ -91,16 +89,20 @@ def post_detail(request, pk):
 def load_more_comments(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments_list = post.comments.all().order_by('-date_posted')
-    page_obj = paginate_queryset(comments_list, request, per_page=2)
+    page_obj = paginate_queryset(comments_list, request, per_page=3)
 
     comments_data = []
     for c in page_obj:
         # Default profile image
         profile_image_url = '/media/default_images/default_profile.jpg'
 
-        # Check if profile exists and has an image
-        if hasattr(c.user, 'profile') and getattr(c.user.profile, 'image', None):
-            profile_image_url = c.user.profile.image.url
+        # Use user's profile image if available
+        try:
+            if c.user.profile and c.user.profile.image:
+                profile_image_url = c.user.profile.image.url
+        except Exception:
+            # In case the user has no profile or image, keep the default
+            pass
 
         comments_data.append({
             'id': c.id,
