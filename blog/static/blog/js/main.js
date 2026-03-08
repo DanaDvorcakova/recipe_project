@@ -176,7 +176,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ----------------- Show More Comments -----------------
-    const showMoreBtn = document.getElementById("show-more-btn");
+// ----------------- Show More Comments -----------------
+const showMoreBtn = document.getElementById("show-more-btn");
 
 if (showMoreBtn) {
 
@@ -190,13 +191,10 @@ if (showMoreBtn) {
             .then(data => {
 
                 const commentsList = document.getElementById("comments-list");
-
                 if (!commentsList) return;
 
-                // Insert Django-rendered HTML
                 commentsList.insertAdjacentHTML("beforeend", data.html);
 
-                // Update next page or remove button
                 if (data.has_next) {
                     showMoreBtn.dataset.nextPage = data.next_page;
                 } else {
@@ -206,18 +204,18 @@ if (showMoreBtn) {
             })
             .catch(error => console.error("Error loading comments:", error));
     });
-
 }
 
-        // ================= Event delegation for comment images =================
-        const commentsContainer = document.getElementById("comments-list");
-        commentsContainer.addEventListener("click", function(e) {
-            if(e.target.tagName === "IMG" && e.target.classList.contains("account-img")) {
-                console.log("Profile image clicked for:", e.target.alt);
-                // Optional: open profile modal or perform animation
-            }
-        });
-    }
+// ---------------- Comment Image Click ----------------
+const commentsContainer = document.getElementById("comments-list");
+
+if (commentsContainer) {
+    commentsContainer.addEventListener("click", function(e) {
+        if (e.target.tagName === "IMG" && e.target.classList.contains("comment-avatar")) {
+            console.log("Profile image clicked for:", e.target.alt);
+        }
+    });
+}
 
     // ----------------- Back to Top -----------------
     const backToTopBtn = document.getElementById('backToTopBtn');
