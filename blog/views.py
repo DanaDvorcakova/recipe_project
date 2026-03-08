@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.contrib import messages
-from django.template.loader import render_to_string
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
@@ -87,33 +86,39 @@ def post_detail(request, pk):
     return render(request, 'blog/post_detail.html', context)
 
 # ---------------- Load More Comments ----------------
-from django.template.loader import render_to_string
-from django.http import JsonResponse
-from django.core.paginator import Paginator
+def load_more_comments(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments_list = post.comments.all().order_by('-date_posted')
+    page_obj = paginate_queryset(comments_list, request, per_page=3)
 
+    comments_data = []
+    for c in page_obj:
+        # Default profile image
+        profile_image_url = '/media/default_images/default_profile.jpg'
 
-def load_more_comments(request, post_id):
-    page = request.GET.get("page")
+        # Use user's profile image if available
+        try:
+            if c.user.profile and c.user.profile.image:
+                profile_image_url = c.user.profile.image.url
+        except Exception:
+            # In case the user has no profile or image, keep the default
+            pass
 
-    comments = Comment.objects.filter(post_id=post_id).order_by("-date_posted")
-
-    paginator = Paginator(comments, 3)
-    page_obj = paginator.get_page(page)
-
-    html = ""
-
-    for comment in page_obj:
-        html += render_to_string(
-            "partials/comment.html",
-            {"comment": comment},
-            request=request
-        )
+        comments_data.append({
+            'id': c.id,
+            'username': c.user.username,
+            'profile_image_url': profile_image_url,
+            'content': c.content,
+            'date_posted': c.date_posted.strftime("%b %d, %Y %H:%M")
+        })
 
     return JsonResponse({
-        "html": html,
-        "has_next": page_obj.has_next(),
-        "next_page": page_obj.next_page_number() if page_obj.has_next() else None
+        'comments': comments_data,
+        'has_next': page_obj.has_next(),
+        'next_page': page_obj.next_page_number() if page_obj.has_next() else None
     })
+
+
 
 # ---------------- Post Create / Update / Delete ----------------
 class PostCreateView(LoginRequiredMixin, CreateView):
