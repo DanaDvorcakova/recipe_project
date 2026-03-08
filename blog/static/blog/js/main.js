@@ -197,9 +197,9 @@ if (showMoreBtn) {
                             <div class="card-body p-3">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <div class="d-flex align-items-center">
-                                        <img src="${comment.profile_image_url}" 
-                                             alt="${comment.username}'s profile" 
-                                             class="rounded-circle me-2 border account-img">
+                                        <img src="/media/${comment.profile_image_url}" 
+     alt="${comment.username}'s profile" 
+     class="rounded-circle me-2 border account-img">
                                         <div class="fw-bold text-primary">${comment.username}</div>
                                     </div>
                                     <small class="text-muted">${comment.date_posted}</small>
