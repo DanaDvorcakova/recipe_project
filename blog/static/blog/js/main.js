@@ -173,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ----------------- Show More Comments -----------------
-// ================= Show More Comments =================
 const showMoreBtn = document.getElementById("show-more-btn");
 if (showMoreBtn) {
 
