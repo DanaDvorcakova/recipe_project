@@ -1,4 +1,5 @@
 // ------------------ CSRF Helper ------------------
+// ------------------ CSRF Helper ------------------
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -17,7 +18,6 @@ function getCookie(name) {
 if (!window.csrftoken) {
     window.csrftoken = getCookie('csrftoken');
 }
-const csrftoken = window.csrftoken;
 
 // ------------------ Toast Container ------------------
 let toastContainer = document.getElementById('toast-container');
