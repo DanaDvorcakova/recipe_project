@@ -414,3 +414,18 @@ form .btn-outline-info:hover {
     margin: 0 auto;         
     display: block;         
 }
+
+
+.comment-box {
+    background-color:#f8f9fa;
+}
+
+.comment-box img {
+    width:45px;
+    height:45px;
+    object-fit:cover;
+}
+
+.comment-box p {
+    line-height:1.5;
+}
