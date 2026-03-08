@@ -416,16 +416,7 @@ form .btn-outline-info:hover {
 }
 
 
-.comment-box {
-    background-color:#f8f9fa;
-}
-
-.comment-box img {
+.comment-avatar {
     width:45px;
     height:45px;
-    object-fit:cover;
-}
-
-.comment-box p {
-    line-height:1.5;
 }
