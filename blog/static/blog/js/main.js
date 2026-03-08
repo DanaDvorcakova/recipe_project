@@ -193,20 +193,21 @@ if (showMoreBtn) {
                         div.className = "card mb-3 shadow-sm comment-box rounded-3";
                         div.setAttribute("data-comment-id", comment.id);
 
-                        div.innerHTML = `
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div class="d-flex align-items-center">
-                                        <img src="${comment.profile_image_url}" 
-                                             alt="${comment.username}'s profile" 
-                                             class="rounded-circle me-2 border account-img">
-                                        <div class="fw-bold text-primary">${comment.username}</div>
-                                    </div>
-                                    <small class="text-muted">${comment.date_posted}</small>
-                                </div>
-                                <p class="mb-0">${comment.content}</p>
-                            </div>
-                        `;
+                div.innerHTML = `
+    <div class="card-body p-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="d-flex align-items-center">
+                <img src="${comment.profile_image_url}" 
+                     alt="${comment.username}'s profile" 
+                     class="rounded-circle me-2 border account-img"
+                     style="width:45px; height:45px; object-fit:cover; border:1px solid #dee2e6;">
+                <div class="fw-bold text-primary">${comment.username}</div>
+            </div>
+            <small class="text-muted">${comment.date_posted}</small>
+        </div>
+        <p class="mb-0" style="line-height:1.5;">${comment.content}</p>
+    </div>
+`;
 
                         // Add smooth animation
                         div.style.opacity = 0;
