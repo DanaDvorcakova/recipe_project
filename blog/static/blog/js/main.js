@@ -172,86 +172,73 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
- // ----------------- Show More Comments -----------------
-document.addEventListener("DOMContentLoaded", () => {
-    const showMoreBtn = document.getElementById("show-more-btn");
-    const commentsList = document.getElementById("comments-list");
+// ================= Show More Comments =================
+const showMoreBtn = document.getElementById("show-more-btn");
+if (showMoreBtn) {
 
-    if (!showMoreBtn || !commentsList) return;
-
-    // Click handler for "Show More"
-    showMoreBtn.addEventListener("click", async function () {
+    showMoreBtn.addEventListener("click", function () {
         const postId = this.dataset.postId;
         let nextPage = parseInt(this.dataset.nextPage);
 
-        try {
-            const response = await fetch(`/post/${postId}/load-more-comments/?page=${nextPage}`);
-            if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+        fetch(`/post/${postId}/load-more-comments/?page=${nextPage}`)
+            .then(response => response.json())
+            .then(data => {
+                const commentsList = document.getElementById("comments-list");
+                if (!commentsList) return;
 
-            const data = await response.json();
+                data.comments.forEach(comment => {
+                    if (!document.querySelector(`[data-comment-id="${comment.id}"]`)) {
 
-            data.comments.forEach(comment => {
-                // Avoid duplicates
-                if (commentsList.querySelector(`[data-comment-id="${comment.id}"]`)) return;
+                        const div = document.createElement("div");
+                        div.className = "card mb-3 shadow-sm comment-box rounded-3";
+                        div.setAttribute("data-comment-id", comment.id);
 
-                const div = document.createElement("div");
-                div.className = "card mb-3 shadow-sm comment-box rounded-3";
-                div.setAttribute("data-comment-id", comment.id);
-
-                // Use absolute media path to avoid broken images
-                const profileImageUrl = comment.profile_image_url.startsWith("/media/")
-                    ? comment.profile_image_url
-                    : `/media/${comment.profile_image_url}`;
-
-                div.innerHTML = `
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <div class="d-flex align-items-center">
-                                <img src="${profileImageUrl}" 
-                                     alt="${comment.username}'s profile" 
-                                     class="rounded-circle me-2 border account-img">
-                                <div class="fw-bold text-primary">${comment.username}</div>
+                        div.innerHTML = `
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <img src="${comment.profile_image_url}" 
+                                             alt="${comment.username}'s profile" 
+                                             class="rounded-circle me-2 border account-img">
+                                        <div class="fw-bold text-primary">${comment.username}</div>
+                                    </div>
+                                    <small class="text-muted">${comment.date_posted}</small>
+                                </div>
+                                <p class="mb-0">${comment.content}</p>
                             </div>
-                            <small class="text-muted">${comment.date_posted}</small>
-                        </div>
-                        <p class="mb-0">${comment.content}</p>
-                    </div>
-                `;
+                        `;
 
-                // Smooth animation
-                div.style.opacity = 0;
-                div.style.transform = "translateY(-20px)";
-                commentsList.appendChild(div);
-                
-                // Trigger transition after appending
-                requestAnimationFrame(() => {
-                    div.style.transition = "all 0.5s ease";
-                    div.style.opacity = 1;
-                    div.style.transform = "translateY(0)";
+                        // Add smooth animation
+                        div.style.opacity = 0;
+                        div.style.transform = "translateY(-20px)";
+                        commentsList.appendChild(div);
+                        setTimeout(() => {
+                            div.style.transition = "all 0.5s ease";
+                            div.style.opacity = 1;
+                            div.style.transform = "translateY(0)";
+                        }, 50);
+                    }
                 });
-            });
 
-            // Update next page or remove button
-            if (data.has_next) {
-                showMoreBtn.dataset.nextPage = data.next_page;
-            } else {
-                showMoreBtn.remove();
-            }
-
-        } catch (error) {
-            console.error("Error loading comments:", error);
-        }
+                // Update next page or remove button
+                if (data.has_next) {
+                    showMoreBtn.dataset.nextPage = data.next_page;
+                } else {
+                    showMoreBtn.remove();
+                }
+            })
+            .catch(error => console.error("Error loading comments:", error));
     });
 
-    // Event delegation for profile image clicks
-    commentsList.addEventListener("click", function(e) {
-        if (e.target.tagName === "IMG" && e.target.classList.contains("account-img")) {
+    // ================= Event delegation for comment images =================
+    const commentsContainer = document.getElementById("comments-list");
+    commentsContainer.addEventListener("click", function(e) {
+        if(e.target.tagName === "IMG" && e.target.classList.contains("account-img")) {
             console.log("Profile image clicked for:", e.target.alt);
-            // Optional: open modal or navigate to profile
+            // Optional: open profile modal or perform animation
         }
     });
-});
-
+}
 
 
     // ----------------- Back to Top -----------------
