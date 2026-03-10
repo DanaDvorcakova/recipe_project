@@ -19,4 +19,4 @@ class Profile(models.Model):
                 self.image.name, width=300, height=300, crop="lfill"
             )[0]
         else: # Fallback to static default image
-            return static('users/default.jpg')
+            return static('users/default.png')
