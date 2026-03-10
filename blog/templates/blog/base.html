@@ -219,7 +219,7 @@
                             <!-- Image -->
                             {% if most_liked_post.image %}
                             <a href="{% url 'post-detail' most_liked_post.pk %}">
-                                <img src="{{ most_liked_post.get_image_url }}" class="sidebar-recipe-img mb-2"
+                                <img src="{{ most_liked_post.get_image.url }}" class="sidebar-recipe-img mb-2"
                                     alt="{{ most_liked_post.title }}">
                             </a>
                             {% endif %}

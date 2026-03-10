@@ -3,6 +3,9 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from cloudinary.utils import cloudinary_url
+from django.templatetags.static import static
+
 class Post(models.Model):
     CATEGORY_CHOICES = [
         ('Appetizer', 'Appetizer'),
@@ -64,3 +67,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.post.title}"
+
+
+    def get_image_url(self):
+        if self.image: # Generate a Cloudinary thumbnail URL
+            return cloudinary_url(
+                self.image.name, width=300, height=300, crop="lfill"
+            )[0]
+        else: # Fallback to static default image
+            return static('blog/images/image1.jpg')
