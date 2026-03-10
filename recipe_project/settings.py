@@ -124,8 +124,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_URL = "static/"
+
+STATICFILES_STORAGE = "whitenoise.storage.ManifestStaticFilesStorage"
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
@@ -158,4 +160,28 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ['CLOUDINARY_CLOUD_NAME'],
     'API_KEY': os.environ['CLOUDINARY_API_KEY'],
     'API_SECRET': os.environ['CLOUDINARY_API_SECRET'],
+}
+
+LOGGING = {
+
+    "version": 1,
+
+    "disable_existing_loggers": False,
+
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+
+    "loggers": {
+
+        "django.request": {
+
+            "handlers": ["console"],
+
+            "level": "ERROR",
+
+            "propagate": True,
+
+        },
+
+    },
+
 }
