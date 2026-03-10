@@ -111,7 +111,7 @@
                 <!-- Comment Header: Profile Image + Username on left, Timestamp on right -->
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <div class="d-flex align-items-center">
-                        <img src="{% if comment.user.profile %}{{ comment.user.profile.image.url }}{% else %}/media/default_images/default_profile.jpg{% endif %}" 
+                        <img src="{{comment.user.profile.get_image_url}}"
                              alt="{{ comment.user.username }}'s profile" 
                              class="rounded-circle me-2 border" 
                              style="width:45px; height:45px; object-fit:cover; border:1px solid #dee2e6;">
