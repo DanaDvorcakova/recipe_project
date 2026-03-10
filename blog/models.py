@@ -30,7 +30,7 @@ class Post(models.Model):
     instructions = models.TextField()
     cooking_time = models.PositiveIntegerField(help_text="Cooking time in minutes")
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Main Course')
-    image = models.ImageField(default='default_images/default_recipe_image.jpg', upload_to='default_images/')
+    image = models.ImageField(default='default_images/default_recipe_image.jpg', upload_to='post_images/')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
