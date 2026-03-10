@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             const li = document.createElement("li");
                             li.className = "dropdown-item d-flex align-items-center";
                             li.innerHTML = `
-                                ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}" 
+                                ${post.image_url ? `<img src="${post.get_image_url}" alt="${post.title}" 
                                     style="width:40px; height:40px; object-fit:cover; margin-right:8px; border-radius:4px;">` : ""} 
                                 <a href="/post/${post.id}/" class="text-decoration-none text-dark">${post.title}</a>
                             `;
@@ -197,7 +197,7 @@ if (showMoreBtn) {
                             <div class="card-body p-3">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <div class="d-flex align-items-center">
-                                        <img src="${comment.profile_image_url}" 
+                                        <img src="${comment.profile_get_image_url}" 
                                              alt="${comment.username}'s profile" 
                                              class="rounded-circle me-2 border account-img">
                                         <div class="fw-bold text-primary">${comment.username}</div>
@@ -274,7 +274,7 @@ if (showMoreBtn) {
                     if (modalContent) {
                         modalContent.innerHTML = `
                             <h4>${data.title}</h4>
-                            ${data.image_url ? `<img src="${data.image_url}" class="img-fluid mb-3" alt="${data.title}">` : ''}
+                            ${data.image_url ? `<img src="${data.get_image_url}" class="img-fluid mb-3" alt="${data.title}">` : ''}
                             <p><strong>Description:</strong> ${data.description}</p>
                             <h6>Ingredients:</h6><p>${data.ingredients}</p>
                             <h6>Instructions:</h6><p>${data.instructions}</p>

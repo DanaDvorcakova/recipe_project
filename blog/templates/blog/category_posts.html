@@ -25,7 +25,7 @@
         <!-- Image with default fallback -->
         <a href="{% url 'post-detail' post.pk %}">
             {% if post.image %}
-                <img src="{{ post.image.url }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Image of {{ post.title }}">
+                <img src="{{ post.get_image_url}}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Image of {{ post.title }}">
             {% else %}
                 <img src="{% static 'blog/images/default.jpg' %}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Default recipe image">
             {% endif %}
