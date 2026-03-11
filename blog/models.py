@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from cloudinary.utils import cloudinary_url
 from django.templatetags.static import static
-from cloudinary.models import CloudinaryField
 
 class Post(models.Model):
     CATEGORY_CHOICES = [
@@ -32,11 +31,7 @@ class Post(models.Model):
     instructions = models.TextField()
     cooking_time = models.PositiveIntegerField(help_text="Cooking time in minutes")
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Main Course')
-    image = CloudinaryField(
-    'image',
-    folder='post_images',
-    default='default_images/default_recipe_image'
-)
+    image = models.ImageField(default='default_images/default_recipe_image.jpg', upload_to='post_images/')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
