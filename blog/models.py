@@ -39,6 +39,7 @@ class Post(models.Model):
         storage=MediaCloudinaryStorage(),
         blank=True,
         null=True,
+        default='blog/images/default_recipe.image.jpg'
     )
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
