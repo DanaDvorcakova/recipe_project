@@ -8,17 +8,12 @@
 </a>
 
 <!-- Recipe Title & Hero Image -->
+<!-- Recipe Title & Hero Image -->
 <div class="mb-4 text-center">
     <h2 class="display-4 fw-bold">{{ post.title }}</h2>
-    {% if post.image %}
     <img src="{{ post.get_image_url }}" 
          class="img-fluid recipe-img-full mb-3" 
          alt="{{ post.title }}">
-{% else %}
-    <img src="{% static 'blog/images/default_recipe_image.jpg' %}" 
-         class="img-fluid recipe-img-full mb-3" 
-         alt="Default recipe image">
-{% endif %}
 </div>
 
 <!-- Recipe Metadata -->
