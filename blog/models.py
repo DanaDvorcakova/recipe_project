@@ -65,7 +65,7 @@ class Post(models.Model):
         """
         if self.image:
             return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
-        return static('blog/images/default_recipe.jpg')
+        return static('blog/images/default_recipe_image.jpg')
 
 
 # -------------------- Comments --------------------

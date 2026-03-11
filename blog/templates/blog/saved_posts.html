@@ -13,7 +13,7 @@
             <!-- Left: image + title + stats -->
             <div class="d-flex align-items-start align-items-md-center flex-grow-1">
                 {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="saved-img">
+                <img src="{{ post.get_image_url }}" alt="{{ post.title }}" class="saved-img">
                 {% endif %}
                 <div class="ms-3">
                     <a href="{% url 'post-detail' post.id %}"
