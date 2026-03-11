@@ -20,13 +20,15 @@ class Post(models.Model):
         ('Archived', 'Archived'),
     ]
 
-    title = models.CharField(max_length=100)
+    # Required Fields (Mapped)
+    title = models.CharField(max_length=100)  # project_name
     description = models.TextField()
-    start_date = models.DateField(default=timezone.now)
-    end_date = models.DateField(null=True, blank=True)
+    start_date = models.DateField(default=timezone.now)  # start_date
+    end_date = models.DateField(null=True, blank=True)  # end_date
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Draft')
     stakeholders = models.ManyToManyField(User, related_name='contributed_posts', blank=True)
 
+    # Recipe Fields
     ingredients = models.TextField()
     instructions = models.TextField()
     cooking_time = models.PositiveIntegerField(help_text="Cooking time in minutes")
@@ -35,7 +37,10 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
+    # Like functionality
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
+
+    # Save/Bookmark functionality
     saved_by = models.ManyToManyField(User, related_name='saved_posts', blank=True)
 
     def total_likes(self):
@@ -44,18 +49,32 @@ class Post(models.Model):
     def total_saves(self):
         return self.saved_by.count()
 
-    def get_image_url(self):
-        if self.image:
-            return cloudinary_url(
-                self.image.name,
-                width=300,
-                height=300,
-                crop="fill"
-            )[0]
-        return static('blog/images/image1.jpg')
-
     def __str__(self):
         return self.title
-
+    
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
+
+class Comment(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-date_posted']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.post.title}"
+
+def get_image_url(self):
+    if self.image:
+        return cloudinary_url(
+            self.image.name,
+            width=300,
+            height=300,
+            crop="fill"
+        )[0]
+    return static('blog/images/image1.jpg')
+
+
