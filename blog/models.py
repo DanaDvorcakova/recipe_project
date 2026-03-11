@@ -60,28 +60,13 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
-
-
-
-def get_image_url(self):
+    def get_image_url(self):
         """
-        Returns a Cloudinary URL if an image is uploaded,
-        otherwise returns the URL of a static default image.
+        Returns the Cloudinary URL if image exists, otherwise fallback to static default.
         """
-        if self.image and hasattr(self.image, 'name') and self.image.name:
-            # Uploaded image
+        if self.image:
             return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
-
-        # Fallback: use static default
-        return '/static/blog/images/default_recipe_image.jpg'  # <- exact path inside blog/static
-
-
-
-
-
-
-
-    
+        return static('blog/images/default_recipe_image.jpg')
 
 # -------------------- Comments --------------------
 class Comment(models.Model):
