@@ -34,13 +34,15 @@ class Post(models.Model):
     instructions = models.TextField()
     cooking_time = models.PositiveIntegerField(help_text="Cooking time in minutes")
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Main Course')
+
     image = models.ImageField(
         upload_to='post_images/',
         storage=MediaCloudinaryStorage(),
         blank=True,
         null=True,
-        default='blog/images/default_recipe.image.jpg'
+        default=None  # Keep None; fallback handled in get_image_url()
     )
+
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
@@ -62,22 +64,12 @@ class Post(models.Model):
 
     def get_image_url(self):
         """
-        Returns the Cloudinary URL if image exists, otherwise fallback to static default.
+        Returns:
+        - Cloudinary URL if an image is uploaded
+        - Otherwise, fallback to default static image
         """
-        if self.image:
+        if self.image and hasattr(self.image, 'name') and self.image.name:
+            # Uploaded image
             return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
-        return static('blog/images/default_recipe_image.jpg')
-
-
-# -------------------- Comments --------------------
-class Comment(models.Model):
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
-    date_posted = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        ordering = ['-date_posted']
-
-    def __str__(self):
-        return f"{self.user.username} - {self.post.title}"
+        # Fallback default image
+        return static('blog/images/default_recipe.jpg')
