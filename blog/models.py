@@ -34,15 +34,13 @@ class Post(models.Model):
     instructions = models.TextField()
     cooking_time = models.PositiveIntegerField(help_text="Cooking time in minutes")
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Main Course')
-
     image = models.ImageField(
         upload_to='post_images/',
         storage=MediaCloudinaryStorage(),
         blank=True,
         null=True,
-        default=None  # Keep None; fallback handled in get_image_url()
+        default='blog/images/default_recipe.image.jpg'
     )
-
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
@@ -62,17 +60,28 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
-    def get_image_url(self):
+
+
+
+def get_image_url(self):
         """
-        Returns:
-        - Cloudinary URL if an image is uploaded
-        - Otherwise, fallback to default static image
+        Returns a Cloudinary URL if an image is uploaded,
+        otherwise returns the URL of a static default image.
         """
         if self.image and hasattr(self.image, 'name') and self.image.name:
             # Uploaded image
             return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
-        # Fallback default image
-        return static('blog/images/default_recipe_image.jpg')
+
+        # Fallback: use static default
+        return '/static/blog/images/default_recipe_image.jpg'  # <- exact path inside blog/static
+
+
+
+
+
+
+
+    
 
 # -------------------- Comments --------------------
 class Comment(models.Model):
