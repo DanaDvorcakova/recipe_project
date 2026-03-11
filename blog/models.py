@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from cloudinary_storage.storage import MediaCloudinaryStorage
 from cloudinary.utils import cloudinary_url
 from django.templatetags.static import static
 
@@ -67,15 +68,21 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.post.title}"
 
-def get_image_url(self):
-    if self.image:
-        url, options = cloudinary_url(
-            self.image.public_id,
-            width=300,
-            height=300,
-            crop="fill"
-        )
-        return url
-    return static('blog/images/image1.jpg')
 
 
+
+class Post(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(
+        upload_to='post_images',
+        storage=MediaCloudinaryStorage(),
+        null=True, # a missing profile image is handled by get_image_url
+    )
+
+    def get_image_url(self):
+        if self.image: # Generate a Cloudinary thumbnail URL
+            return cloudinary_url(
+                self.image.name, width=300, height=300, crop="lfill"
+            )[0]
+        else: # Fallback to static default image
+            return static('blog/images/image1.jpg')
