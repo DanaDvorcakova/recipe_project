@@ -69,12 +69,13 @@ class Comment(models.Model):
 
 def get_image_url(self):
     if self.image:
-        return cloudinary_url(
-            self.image.name,
+        url, options = cloudinary_url(
+            self.image.public_id,
             width=300,
             height=300,
             crop="fill"
-        )[0]
+        )
+        return url
     return static('blog/images/image1.jpg')
 
 

@@ -11,8 +11,8 @@
 <div class="mb-4 text-center">
     <h2 class="display-4 fw-bold">{{ post.title }}</h2>
     {% if post.image %}
-    <img src="{{ post.get_image_url }}" class="img-fluid recipe-img-full mb-3" alt="{{ post.title }}">
-    {% endif %}
+<img src="{{ post.image.url }}" class="img-fluid recipe-img-full mb-3" alt="{{ post.title }}">
+{% endif %}
 </div>
 
 <!-- Recipe Metadata -->
