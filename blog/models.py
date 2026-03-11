@@ -72,4 +72,18 @@ class Post(models.Model):
             # Uploaded image
             return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
         # Fallback default image
-        return static('blog/images/default_recipe.jpg')
+        return static('blog/images/default_recipe_image.jpg')
+
+# -------------------- Comments --------------------
+class Comment(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-date_posted']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.post.title}"
+
