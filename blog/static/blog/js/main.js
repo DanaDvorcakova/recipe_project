@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             const li = document.createElement("li");
                             li.className = "dropdown-item d-flex align-items-center";
                             li.innerHTML = `
-                                ${post.image_url ? `<img src="${post.get_image_url}" alt="${post.images}" 
+                                ${post.image_url ? `<img src="${post.get_image_url}" alt="${post.title}" 
                                     style="width:40px; height:40px; object-fit:cover; margin-right:8px; border-radius:4px;">` : ""} 
                                 <a href="/post/${post.id}/" class="text-decoration-none text-dark">${post.title}</a>
                             `;
