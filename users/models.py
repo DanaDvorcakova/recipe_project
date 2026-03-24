@@ -15,8 +15,9 @@ class Profile(models.Model):
 
     def get_image_url(self):
         if self.image: # Generate a Cloudinary thumbnail URL
-            return cloudinary_url(
-                self.image.name, width=300, height=300, crop="lfill"
-            )[0]
+            if (self.image.name.find("default_recipe") == -1):
+                return cloudinary_url(
+                    self.image.name, width=300, height=300, crop="lfill"
+                )[0]
         else: # Fallback to static default image
             return static('users/default.png')
