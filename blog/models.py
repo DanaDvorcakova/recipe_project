@@ -64,8 +64,10 @@ class Post(models.Model):
         """
         Returns the Cloudinary URL if image exists, otherwise fallback to static default.
         """
+    
         if self.image:
-            return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
+            if (self.image.name.find("default_recipe") == -1):
+                return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
         return static('blog/images/default_recipe_image.jpg')
 
 # -------------------- Comments --------------------
