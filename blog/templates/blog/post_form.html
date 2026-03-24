@@ -58,7 +58,7 @@
             {% if form.instance.image %}
             <div class="mt-3">
                 <label>Current Image:</label>
-                <a href="{{ form.instance.image.url }}" target="_blank">View Uploaded Image</a>
+                <a href="{{ form.instance.get_image_url }}" target="_blank">View Uploaded Image</a>
             </div>
             {% endif %}
         </div>
