@@ -422,27 +422,8 @@ form .btn-outline-info:hover {
 
 
 
-/* Initial comments avatars: bigger size (first 3) */
-.comment-box .comment-avatar {
-    width: 45px;
-    height: 45px;
+.comment-avatar {
+    width: 40px;
+    height: 40px;
     object-fit: cover;
-    border: 1px solid #dee2e6;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-/* Newly loaded comments avatars: smaller size */
-.comment-box.loaded-comment .comment-avatar {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-    border: 1px solid #dee2e6;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-/* Comment content styling */
-.comment-content {
-    line-height: 1.5;
 }

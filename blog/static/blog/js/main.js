@@ -197,9 +197,12 @@ if (showMoreBtn) {
                             <div class="card-body p-3">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <div class="d-flex align-items-center">
-                                        <img src="${comment.profile_get_image_url}" 
-                                             alt="${comment.username}'s profile" 
-                                             class="rounded-circle me-2 border account-img">
+                                    
+                                       <img src="${comment.profile.get_image_url}"
+     onerror="this.src='/static/users/default_profile.png';"
+     alt="${comment.username}'s profile"
+     class="comment-avatar rounded-circle border me-2">
+
                                         <div class="fw-bold text-primary">${comment.username}</div>
                                     </div>
                                     <small class="text-muted">${comment.date_posted}</small>
