@@ -107,7 +107,7 @@ def load_more_comments(request, pk):
         comments_data.append({
             'id': c.id,
             'username': c.user.username,
-            'profile_get_image_url': profile_image_url,
+            'profile_image_url': profile_image_url,
             'content': c.content,
             'date_posted': c.date_posted.strftime("%b %d, %Y %H:%M")
         })

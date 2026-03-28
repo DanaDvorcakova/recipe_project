@@ -114,18 +114,17 @@
 
 
                         <img src="{{ comment.user.profile.get_image_url }}"
-     style="width:40px; height:40px; object-fit:cover;"
-     class="rounded-circle border me-2">
+                        style="width:40px; height:40px; object-fit:cover;"
+                        class="comment-avatar rounded-circle border me-2">
 
-
-
-                        <div class="fw-bold text-primary">{{ comment.user.username }}</div>
+                      <div class="fw-bold text-primary">{{ comment.user.username }}</div>
                     </div>
                     <small class="text-muted">{{ comment.date_posted|date:"M d, Y H:i" }}</small>
                 </div>
 
                 <!-- Comment Content -->
                 <p class="mb-0 comment-content">{{ comment.content }}</p>
+                
             </div>
         </div>
         {% endfor %}
@@ -157,11 +156,6 @@
         {% endif %}
     </div>
 </div>
-
-
-
-
-
 
 
 <!-- Custom JS -->

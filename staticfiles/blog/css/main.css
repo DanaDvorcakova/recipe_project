@@ -416,7 +416,14 @@ form .btn-outline-info:hover {
 }
 
 
+.bg-light-gray {
+    background-color: #f8f9fa; /* same as inline background */
+}
+
+
+
 .comment-avatar {
-    width:45px;
-    height:45px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
 }

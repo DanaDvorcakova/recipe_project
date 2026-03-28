@@ -13,6 +13,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 const csrftoken = getCookie('csrftoken');
 
 // ------------------ Toast Container ------------------
@@ -141,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
             button.classList.add('animate-like');
             setTimeout(() => button.classList.remove('animate-like'), 500);
         }
+
         likeBtn.addEventListener("click", function () {
             const postId = this.dataset.id;
             fetch(`/post/${postId}/like/`, {
@@ -155,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 const likeCountEl = document.getElementById("like-count");
                 if (likeCountEl) likeCountEl.innerText = data.total_likes;
+
                 if (data.liked) {
                     likeBtn.classList.remove("btn-outline-danger");
                     likeBtn.classList.add("btn-danger");
@@ -166,76 +169,69 @@ document.addEventListener("DOMContentLoaded", function () {
                     likeBtn.innerHTML = `🤍 Like (<span id="like-count">${data.total_likes}</span>)`;
                     showToast("Recipe unliked!", "like");
                 }
+
                 animateHeart(likeBtn);
             })
             .catch(err => console.error("Like error:", err));
         });
     }
 
-// ================= Show More Comments =================
-const showMoreBtn = document.getElementById("show-more-btn");
-if (showMoreBtn) {
+    // ================= Show More Comments =================
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener("click", function () {
+            const postId = this.dataset.postId;
+            let nextPage = parseInt(this.dataset.nextPage);
 
-    showMoreBtn.addEventListener("click", function () {
-        const postId = this.dataset.postId;
-        let nextPage = parseInt(this.dataset.nextPage);
+            fetch(`/post/${postId}/load-more-comments/?page=${nextPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    const commentsList = document.getElementById("comments-list");
+                    if (!commentsList) return;
 
-        fetch(`/post/${postId}/load-more-comments/?page=${nextPage}`)
-            .then(response => response.json())
-            .then(data => {
-                const commentsList = document.getElementById("comments-list");
-                if (!commentsList) return;
+                    data.comments.forEach(comment => {
+                        if (!document.querySelector(`[data-comment-id="${comment.id}"]`)) {
+                            const div = document.createElement("div");
+                            div.className = "card mb-3 shadow-sm comment-box rounded-3 bg-light-gray";
+                            div.setAttribute("data-comment-id", comment.id);
 
-                data.comments.forEach(comment => {
-                    if (!document.querySelector(`[data-comment-id="${comment.id}"]`)) {
-
-                        const div = document.createElement("div");
-                        div.className = "card mb-3 shadow-sm comment-box rounded-3";
-                        div.setAttribute("data-comment-id", comment.id);
-
-                        div.innerHTML = `
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div class="d-flex align-items-center">  
-                                    
-                                    
-                                       <img src="${comment.profile_image_url}" 
-     style="width:40px; height:40px; object-fit:cover;"
-     class="comment-avatar rounded-circle border me-2">
-
-
-                                        <div class="fw-bold text-primary">${comment.username}</div>
+                            div.innerHTML = `
+                                <div class="card-body p-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="d-flex align-items-center">  
+                                            <img src="${comment.profile_image_url}" 
+                                                 style="width:40px; height:40px; object-fit:cover;"
+                                                 class="comment-avatar rounded-circle border me-2">
+                                            <div class="fw-bold text-primary">${comment.username}</div>
+                                        </div>
+                                        <small class="text-muted">${comment.date_posted}</small>
                                     </div>
-                                    <small class="text-muted">${comment.date_posted}</small>
+                                    <p class="mb-0">${comment.content}</p>
                                 </div>
-                                <p class="mb-0">${comment.content}</p>
-                            </div>
-                        `;
+                            `;
 
-                        // Add smooth animation
-                        div.style.opacity = 0;
-                        div.style.transform = "translateY(-20px)";
-                        commentsList.appendChild(div);
-                        setTimeout(() => {
-                            div.style.transition = "all 0.5s ease";
-                            div.style.opacity = 1;
-                            div.style.transform = "translateY(0)";
-                        }, 50);
+                            // smooth animation
+                            div.style.opacity = 0;
+                            div.style.transform = "translateY(-20px)";
+                            commentsList.appendChild(div);
+                            setTimeout(() => {
+                                div.style.transition = "all 0.5s ease";
+                                div.style.opacity = 1;
+                                div.style.transform = "translateY(0)";
+                            }, 50);
+                        }
+                    });
+
+                    // Update next page or remove button
+                    if (data.has_next) {
+                        showMoreBtn.dataset.nextPage = data.next_page;
+                    } else {
+                        showMoreBtn.remove();
                     }
-                });
-
-                // Update next page or remove button
-                if (data.has_next) {
-                    showMoreBtn.dataset.nextPage = data.next_page;
-                } else {
-                    showMoreBtn.remove();
-                }
-            })
-            .catch(error => console.error("Error loading comments:", error));
-    });
-
- 
-
+                })
+                .catch(error => console.error("Error loading comments:", error));
+        });
+    }
 
     // ----------------- Back to Top -----------------
     const backToTopBtn = document.getElementById('backToTopBtn');
@@ -249,6 +245,7 @@ if (showMoreBtn) {
                 setTimeout(() => backToTopBtn.style.display = 'none', 300);
             }
         });
+
         backToTopBtn.addEventListener('click', function () {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -332,4 +329,3 @@ if (showMoreBtn) {
         }, 3000);
     }
 });
-
