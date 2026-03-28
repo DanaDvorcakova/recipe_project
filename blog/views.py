@@ -94,12 +94,12 @@ def load_more_comments(request, pk):
     comments_data = []
     for c in page_obj:
         # Default profile image
-        profile_image_url = '/media/default_images/default_profile.jpg'
+        profile_image_url = '/static/users/images/default_profile.png'
 
         # Use user's profile image if available
-        try:
-            if c.user.profile and c.user.profile.image:
-                profile_image_url = c.user.profile.image.url
+        try:          
+           if c.user.profile and c.user.profile.image:
+              profile_image_url = c.user.profile.image.url
         except Exception:
             # In case the user has no profile or image, keep the default
             pass
@@ -107,7 +107,7 @@ def load_more_comments(request, pk):
         comments_data.append({
             'id': c.id,
             'username': c.user.username,
-            'profile_image_url': profile_image_url,
+            'profile_get_image_url': profile_image_url,
             'content': c.content,
             'date_posted': c.date_posted.strftime("%b %d, %Y %H:%M")
         })

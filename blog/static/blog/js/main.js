@@ -196,12 +196,13 @@ if (showMoreBtn) {
                         div.innerHTML = `
                             <div class="card-body p-3">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center">  
                                     
-                                       <img src="${comment.profile.get_image_url}"
-     onerror="this.src='/static/users/default_profile.png';"
-     alt="${comment.username}'s profile"
+                                    
+                                       <img src="${comment.profile_image_url}" 
+     style="width:40px; height:40px; object-fit:cover;"
      class="comment-avatar rounded-circle border me-2">
+
 
                                         <div class="fw-bold text-primary">${comment.username}</div>
                                     </div>
@@ -233,15 +234,7 @@ if (showMoreBtn) {
             .catch(error => console.error("Error loading comments:", error));
     });
 
-    // ================= Event delegation for comment images =================
-    const commentsContainer = document.getElementById("comments-list");
-    commentsContainer.addEventListener("click", function(e) {
-        if(e.target.tagName === "IMG" && e.target.classList.contains("account-img")) {
-            console.log("Profile image clicked for:", e.target.alt);
-            // Optional: open profile modal or perform animation
-        }
-    });
-}
+ 
 
 
     // ----------------- Back to Top -----------------

@@ -111,9 +111,14 @@
                 <!-- Comment Header: Profile Image + Username on left, Timestamp on right -->
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <div class="d-flex align-items-center">
+
+
                         <img src="{{ comment.user.profile.get_image_url }}"
-                             alt="{{ comment.user.username }}'s profile"
-                             class="comment-avatar rounded-circle border me-2">
+     style="width:40px; height:40px; object-fit:cover;"
+     class="rounded-circle border me-2">
+
+
+
                         <div class="fw-bold text-primary">{{ comment.user.username }}</div>
                     </div>
                     <small class="text-muted">{{ comment.date_posted|date:"M d, Y H:i" }}</small>

@@ -19,3 +19,6 @@ class Profile(models.Model):
             if "default_profile" not in self.image.name:
                 return cloudinary_url(self.image.name, width=300, height=300, crop="lfill")[0]
         return static('users/images/default_profile.png')
+
+
+
