@@ -66,7 +66,7 @@ class Post(models.Model):
         """
     
         if self.image:
-            if (self.image.name.find("default_recipe") == -1):
+            if "default_recipe" not in self.image.name:
                 return cloudinary_url(self.image.name, width=800, height=600, crop="fill")[0]
         return static('blog/images/default_recipe_image.jpg')
 
@@ -83,3 +83,5 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.post.title}"
 
+
+        console.log(data.image_url); 

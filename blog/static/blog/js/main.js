@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ================= Recipe Modal =================
-    const recipeModalEl = document.getElementById('recipeModal');
+        const recipeModalEl = document.getElementById('recipeModal');
     if (recipeModalEl) {
         const recipeModal = new bootstrap.Modal(recipeModalEl);
         document.querySelectorAll('.open-recipe-btn').forEach(button => {
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (modalContent) {
                         modalContent.innerHTML = `
                             <h4>${data.title}</h4>
-                            ${data.image_url ? `<img src="${data.get_image_url}" class="img-fluid mb-3" alt="${data.title}">` : ''}
+                            ${data.image_url ? `<img src="${data.image_url}" class="img-fluid mb-3" alt="${data.title}">` : ''}
                             <p><strong>Description:</strong> ${data.description}</p>
                             <h6>Ingredients:</h6><p>${data.ingredients}</p>
                             <h6>Instructions:</h6><p>${data.instructions}</p>
@@ -281,6 +281,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
+
+
 
     // ================= Live Recipe Search =================
     const searchInput = document.getElementById('live-search');
