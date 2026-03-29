@@ -256,13 +256,17 @@ def about(request):
 def recipe_detail_json(request, pk):
     try:
         post = Post.objects.get(pk=pk)
+
+        image_url = post.image.url if post.image else '/static/blog/images/default.jpg'
+
         return JsonResponse({
-    'title': post.title,
-    'image_url': post.image.url if post.image else None,
-    'description': post.description,
-    'ingredients': post.ingredients,
-    'instructions': post.instructions,
-})
+            'title': post.title,
+            'image_url': post.get_image_url(),
+            'description': post.description,
+            'ingredients': post.ingredients,
+            'instructions': post.instructions,
+        })
+
     except Post.DoesNotExist:
         return JsonResponse({'error': 'Recipe not found'}, status=404)
 

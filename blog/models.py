@@ -84,4 +84,4 @@ class Comment(models.Model):
         return f"{self.user.username} - {self.post.title}"
 
 
-        console.log(data.image_url); 
+   
