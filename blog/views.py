@@ -35,7 +35,8 @@ class PostListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        queryset = Post.objects.all().order_by('-date_posted')
+        # Fetch only Published posts
+        queryset = Post.objects.filter(status='Published').order_by('-date_posted')
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
@@ -60,6 +61,15 @@ class PostListView(ListView):
 # ---------------- Post Detail ----------------
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+
+    # Check if the post is Published; if not, redirect or show an error
+    if post.status != 'Published':
+        # Optionally, you could check if the user is the author or an admin
+        if not request.user == post.author and not request.user.is_staff:
+            # Redirect non-author users and non-admins if the post is not published
+            messages.error(request, "This post is in draft and not available to the public.")
+            return redirect('blog-home')
+
     comments_list = post.comments.all().order_by('-date_posted')
     page_obj = paginate_queryset(comments_list, request, per_page=3)
 
@@ -118,8 +128,6 @@ def load_more_comments(request, pk):
         'next_page': page_obj.next_page_number() if page_obj.has_next() else None
     })
 
-
-
 # ---------------- Post Create / Update / Delete ----------------
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -171,7 +179,7 @@ class UserPostListView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return user.posts.order_by('-date_posted')
+        return user.posts.filter(status='Published').order_by('-date_posted')
 
 class CategoryPostListView(ListView):
     model = Post
@@ -181,7 +189,7 @@ class CategoryPostListView(ListView):
 
     def get_queryset(self):
         category = self.kwargs.get('category')
-        return Post.objects.filter(category=category).order_by('-date_posted')
+        return Post.objects.filter(category=category, status='Published').order_by('-date_posted')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

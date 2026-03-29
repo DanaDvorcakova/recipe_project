@@ -1,11 +1,12 @@
 Recipe Blog Project
 
-This is a Recipe Blog application built with Django. It allows users to browse, create, update, delete, and save recipes. The project features user authentication, post categorization, search functionality, and a dynamic system for liking and saving posts. Users can also comment on recipes and view the most liked posts.
+This is a Recipe Blog application built with Django. It allows users to browse, create, update, delete, comment, like and save recipes. The project features user authentication, post categorization, search functionality, and a dynamic system for liking and saving posts. Users can also comment on recipes and view the most liked posts.
 
 
 FEATURES
 
 User Authentication: Users can sign up, log in, and log out.
+Forgot Password / Password Reset
 Recipe Management: Users can create, edit, and delete their recipes.
 Like and Save Recipes: Users can like and save recipes they find interesting.
 Comment System: Users can add comments to recipes.
@@ -29,7 +30,7 @@ Python 3.13.12: The programming language used to develop the project, leveraging
 
 Render: A cloud platform used to deploy the application. Render hosts the web service and database (PostgreSQL) to ensure the app runs smoothly in production.
 
-python-dotenv: A Python package used to manage environment variables securely, especially for sensitive data like database credentials, using a .env file.
+Python-dotenv: A Python package used to manage environment variables securely, especially for sensitive data like database credentials, using a .env file.
 
 
 
@@ -113,6 +114,7 @@ recipe_project:.
 │   │       │
 │   │       ├───images
 │   │       │       background.jpg
+            |       default_recipe_image.jpg
 │   │       │       image1.jpg
 │   │       │       logo.jpg
 │   │       │
@@ -255,7 +257,7 @@ USAGE
 •	Create New Recipe: Logged-in users can create a new recipe by filling out a form with details like title, description, ingredients, instructions, and an optional image.
 •	Update Existing Recipe: Users can update their own recipes by modifying any of the details via the "Update" button on the recipe detail page.
 •	Delete Recipe: The author of a recipe can delete it. Upon deletion, users will receive a confirmation message.
-•	Draft and Publish: Recipes can be saved as drafts (invisible to the public) or published (visible to everyone). A user can publish a draft or unpublish a published recipe.
+•	Draft and Publish: Recipes can be saved as drafts or published . A user can publish a draft or unpublish a published recipe.
 •	Permission Restrictions:
    o	Authors (the creators of a post) can update or delete their recipes.
    o	Contributors (users who contribute to a post but are not the authors) can update but not delete a post.
