@@ -416,12 +416,4 @@ Once the deployment is complete, Render will provide a URL where your app is hos
 
 
 
-Notes
-
-The default database used is SQLite, which is sufficient for small-scale applications. If you want to deploy it to production, consider using PostgreSQL or another production-grade database.
-
-The app is designed to be mobile-friendly using Bootstrap 5.
-
-Font Awesome icons are used throughout the site for buttons and 
-
 
