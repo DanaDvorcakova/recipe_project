@@ -1,12 +1,20 @@
 Recipe Blog Project
 
+Author: Dana Dvorcakova
+Date:   05/04/2026
+Link:   https://recipe-project-2-gxqs.onrender.com
+        https://github.com/DanaDvorcakova/recipe_project
+
+
+OVERVIEW
+
 This is a Recipe Blog application built with Django. It allows users to browse, create, update, delete, comment, like and save recipes. The project features user authentication, post categorization, search functionality, and a dynamic system for liking and saving posts. Users can also comment on recipes and view the most liked posts.
 
 
 FEATURES
 
 User Authentication: Users can sign up, log in, and log out.
-Forgot Password / Password Reset
+Forgot Password / Password Reset: Email verification
 Recipe Management: Users can create, edit, and delete their recipes.
 Like and Save Recipes: Users can like and save recipes they find interesting.
 Comment System: Users can add comments to recipes.
@@ -33,8 +41,18 @@ Render: A cloud platform used to deploy the application. Render hosts the web se
 Python-dotenv: A Python package used to manage environment variables securely, especially for sensitive data like database credentials, using a .env file.
 
 
+TEST CREDENTIAL 
 
-Setup Instructions
+Superuser (Admin credentials for full access):
+   Username: `test_admin`
+   Password: `securepassword123`
+
+Test User (Regular user with limited access):
+   Username: `test_user`
+   Password: `testpassword123`
+
+
+SETUP INSTRUCTIONS
 
 Follow these steps to set up and run the project on your local machine.
 1. Clone the Repository
@@ -257,7 +275,7 @@ USAGE
 •	Create New Recipe: Logged-in users can create a new recipe by filling out a form with details like title, description, ingredients, instructions, and an optional image.
 •	Update Existing Recipe: Users can update their own recipes by modifying any of the details via the "Update" button on the recipe detail page.
 •	Delete Recipe: The author of a recipe can delete it. Upon deletion, users will receive a confirmation message.
-•	Draft and Publish: Recipes can be saved as drafts or published . A user can publish a draft or unpublish a published recipe.
+•	Draft and Publish: Recipes can be saved as drafts (invisible to the public) or published (visible to everyone). A user can publish a draft or unpublish a published recipe.
 •	Permission Restrictions:
    o	Authors (the creators of a post) can update or delete their recipes.
    o	Contributors (users who contribute to a post but are not the authors) can update but not delete a post.
@@ -267,7 +285,7 @@ USAGE
   o	Unpublish: Recipes that are unpublished are only visible to the author and do not appear on the public list of recipes.
 •	The publish/unpublish option is accessible in the recipe detail page under "Manage Recipe."
 5. User Profile
-•	Users can view and edit their profiles, including updating their avatar image, bio, and other personal information.
+•	Users can view and edit their profiles, including updating their avatar image, and other personal information.
 •	The profile page shows:
   o	A list of saved recipes that the user has bookmarked for later use.
   o	Recent activity such as recently published or updated recipes.
@@ -281,11 +299,7 @@ Admins can:
 •	Access the admin panel at /admin by logging in with the superuser credentials created during the setup.
 
 
-
-
 Deployment on Render with PostgreSQL
-
-If you're deploying your app on Render, follow these steps to ensure it's correctly configured to use PostgreSQL instead of the default SQLite database.
 
 1. Set Up PostgreSQL on Render
 1.1 Create a PostgreSQL Database on Render
@@ -299,6 +313,7 @@ Choose the appropriate region and settings for your database.
 After the database is created, Render will provide a Database URL which looks like this:
 
 postgres://username:password@host:port/database_name
+
 1.2 Configure PostgreSQL in Your Django Project
 
 Install PostgreSQL Dependencies:
@@ -352,6 +367,7 @@ This package will automatically load the environment variables when the applicat
 After setting up the database, you will need to run the migrations to create the necessary tables:
 
 python manage.py migrate
+
 2. Deploy the Application on Render
 2.1 Create a New Web Service on Render
 
@@ -368,18 +384,15 @@ pip install -r requirements.txt
 Set the Start Command to:
 
 gunicorn recipe_project.wsgi:application
+
 2.2 Configure Environment Variables on Render
 
 In the Environment Variables section on Render, add the same environment variables as in your .env file:
 
 DB_NAME
-
 DB_USER
-
 DB_PASSWORD
-
 DB_HOST
-
 DB_PORT
 
 These variables will be used to configure the connection to your PostgreSQL database in the settings.py file.
@@ -402,6 +415,7 @@ Once the deployment is complete, Render will provide a URL where your app is hos
 
 
 
+
 Notes
 
 The default database used is SQLite, which is sufficient for small-scale applications. If you want to deploy it to production, consider using PostgreSQL or another production-grade database.
@@ -411,10 +425,3 @@ The app is designed to be mobile-friendly using Bootstrap 5.
 Font Awesome icons are used throughout the site for buttons and 
 
 
-Final Notes
-
-Database URL: When you deploy the project, Render will provide the PostgreSQL database URL. You don't need to hard-code it in your settings; just use environment variables as shown above.
-
-PostgreSQL Schema: Make sure you run migrations (python manage.py migrate) once your database is set up to create the necessary schema.
-
-Security: Keep your .env file secure and never commit it to version control. You can use .gitignore to ignore it.
