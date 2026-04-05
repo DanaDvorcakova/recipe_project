@@ -285,7 +285,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     // ================= Live Recipe Search =================
     const searchInput = document.getElementById('live-search');
     const resultsBox = document.getElementById('live-results');

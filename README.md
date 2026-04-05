@@ -1,10 +1,11 @@
 Recipe Blog Project
 
-Author: Dana Dvorcakova
-Date:   05/04/2026
-Link:   https://recipe-project-2-gxqs.onrender.com
-        https://github.com/DanaDvorcakova/recipe_project
-
+Author:    Dana Dvorcakova
+Date:      05/04/2026
+Link:      https://recipe-project-2-gxqs.onrender.com
+           https://github.com/DanaDvorcakova/recipe_project
+Database:  recipe_project_db_2026
+           postgresql://recipe_project_db_2026_user:hVJak420f03mUokUW4rwen3TUElp24jD@dpg-d6lkrmdm5p6s73evd8ng-a.frankfurt-postgres.render.com/recipe_project_db_2026
 
 OVERVIEW
 
